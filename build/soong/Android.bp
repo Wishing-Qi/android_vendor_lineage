@@ -474,3 +474,37 @@ qti_vibrator_hal {
         },
     },
 }
+
+soong_config_module_type {
+    name: "enforce_ab_ota_partition_list",
+    module_type: "cc_defaults",
+    config_namespace: "twrpGlobalVars",
+    bool_variables: ["target_enforce_ab_ota_partition_list"],
+    properties: ["cflags"],
+}
+
+enforce_ab_ota_partition_list {
+    name: "enforce_ab_ota_partition_list_defaults",
+    soong_config_variables: {
+        target_enforce_ab_ota_partition_list: {
+            cflags: ["-DTARGET_ENFORCE_AB_OTA_PARTITION_LIST"],
+        },
+    },
+}
+
+soong_config_module_type {
+    name: "legacy_hw_disk_encryption",
+    module_type: "cc_defaults",
+    config_namespace: "twrpGlobalVars",
+    bool_variables: ["legacy_hw_disk_encryption"],
+    properties: ["cppflags"],
+}
+
+legacy_hw_disk_encryption {
+    name: "legacy_hw_disk_encryption_defaults",
+    soong_config_variables: {
+        legacy_hw_disk_encryption: {
+            cppflags: ["-DLEGACY_HW_DISK_ENCRYPTION"],
+        },
+    },
+}
