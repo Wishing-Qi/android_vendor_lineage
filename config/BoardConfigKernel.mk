@@ -107,7 +107,7 @@ endif
 KERNEL_MAKE_FLAGS :=
 
 # Add back threads, ninja cuts this to $(getconf _NPROCESSORS_ONLN)/2
-KERNEL_MAKE_FLAGS += -j$(shell getconf _NPROCESSORS_ONLN)
+KERNEL_MAKE_FLAGS += "-j4 CPATH=\"/usr/include:/usr/include/x86_64-linux-gnu\" HOSTLDFLAGS=\"-L/usr/lib/x86_64-linux-gnu -L/usr/lib64 -fuse-ld=lld\"
 
 TOOLS_PATH_OVERRIDE := \
     PERL5LIB=$(BUILD_TOP)/prebuilts/tools-lineage/common/perl-base
@@ -143,15 +143,15 @@ ifneq ($(KERNEL_NO_GCC), true)
     KERNEL_TOOLCHAIN_PATH_gcc := $(KERNEL_TOOLCHAIN_$(KERNEL_ARCH))
 
     ifneq ($(TARGET_KERNEL_CLANG_COMPILE),false)
-        KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(KERNEL_TOOLCHAIN_PATH)"
+        KERNEL_CROSS_COMPILE := CROSS_COMPILE=\"$(KERNEL_TOOLCHAIN_PATH)\"
     else
-        KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(CCACHE_BIN) $(KERNEL_TOOLCHAIN_PATH)"
+        KERNEL_CROSS_COMPILE := CROSS_COMPILE=\"$(CCACHE_BIN) $(KERNEL_TOOLCHAIN_PATH)\"
     endif
 
     # Needed for CONFIG_COMPAT_VDSO, safe to set for all arm64 builds
     ifeq ($(KERNEL_ARCH),arm64)
-        KERNEL_CROSS_COMPILE += CROSS_COMPILE_ARM32="$(KERNEL_TOOLCHAIN_arm)/$(KERNEL_TOOLCHAIN_PREFIX_arm)"
-        KERNEL_CROSS_COMPILE += CROSS_COMPILE_COMPAT="$(KERNEL_TOOLCHAIN_arm)/$(KERNEL_TOOLCHAIN_PREFIX_arm)"
+        KERNEL_CROSS_COMPILE += CROSS_COMPILE_ARM32=\"$(KERNEL_TOOLCHAIN_arm)/$(KERNEL_TOOLCHAIN_PREFIX_arm)\"
+        KERNEL_CROSS_COMPILE += CROSS_COMPILE_COMPAT=\"$(KERNEL_TOOLCHAIN_arm)/$(KERNEL_TOOLCHAIN_PREFIX_arm)\"
     endif
 
     ifeq ($(TARGET_KERNEL_CLANG_COMPILE),false)
@@ -226,7 +226,7 @@ TOOLS_PATH_OVERRIDE += BISON_PKGDATADIR=$(BUILD_TOP)/prebuilts/build-tools/commo
 
 # Since Linux 5.10, pahole is required
 KERNEL_MAKE_FLAGS += PAHOLE=$(BUILD_TOP)/prebuilts/kernel-build-tools/linux-x86/bin/pahole
-KERNEL_MAKE_FLAGS += "
+KERNEL_MAKE_FLAGS += 
 # Set the out dir for the kernel's O= arg
 # This needs to be an absolute path, so only set this if the standard out dir isn't used
 OUT_DIR_PREFIX := $(shell echo $(OUT_DIR) | sed -e 's|/target/.*$$||g')
